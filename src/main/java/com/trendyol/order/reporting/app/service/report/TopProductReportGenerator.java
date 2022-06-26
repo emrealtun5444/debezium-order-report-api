@@ -1,6 +1,7 @@
 package com.trendyol.order.reporting.app.service.report;
 
 import com.trendyol.order.reporting.app.dto.Order;
+import com.trendyol.order.reporting.app.enm.ReportType;
 import com.trendyol.order.reporting.app.model.TopProduct;
 import com.trendyol.order.reporting.app.repository.TopProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +26,10 @@ public class TopProductReportGenerator implements ReportGenerator {
                 .build());
         topProduct.executeOrder(order);
         topProductRepository.save(topProduct);
+    }
+
+    @Override
+    public ReportType getReportType() {
+        return ReportType.CREATE;
     }
 }

@@ -1,6 +1,7 @@
 package com.trendyol.order.reporting.app.service.report;
 
 import com.trendyol.order.reporting.app.dto.Order;
+import com.trendyol.order.reporting.app.enm.ReportType;
 import com.trendyol.order.reporting.app.model.SellerPerformance;
 import com.trendyol.order.reporting.app.repository.SellerPerformanceRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,4 +27,10 @@ public class SellerPerformanceReportGenerator implements ReportGenerator {
         sellerPerformance.executeOrder(order);
         sellerPerformanceRepository.save(sellerPerformance);
     }
+
+    @Override
+    public ReportType getReportType() {
+        return ReportType.UPDATE;
+    }
+
 }

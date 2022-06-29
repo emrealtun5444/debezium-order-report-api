@@ -15,4 +15,6 @@ public class DebeziumResponseModel<T> implements Serializable {
 
     private T before;
 
+    private String op;
+
 }

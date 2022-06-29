@@ -2,6 +2,7 @@ package com.trendyol.order.reporting.app.model;
 
 import com.trendyol.order.reporting.app.common.model.AbstractEntity;
 import com.trendyol.order.reporting.app.dto.Order;
+import com.trendyol.order.reporting.app.enm.OperationType;
 import com.trendyol.order.reporting.app.enm.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +33,7 @@ public class SellerPerformance extends AbstractEntity {
     @Builder.Default
     private Long totalOrder = 0L;
 
-    public void executeOrder(Order order) {
+    public void executeOrder(Order order, OperationType operationType) {
 
         if (OrderStatus.CREATED.getName().equals(order.getStatus())) {
             setTotalOrderCreated(increase(getTotalOrderCreated()));
@@ -40,12 +41,14 @@ public class SellerPerformance extends AbstractEntity {
         }
 
         if (OrderStatus.SHIPPED.getName().equals(order.getStatus())) {
-            setTotalOrderCreated(decrease(getTotalOrderCreated()));
+            if (!OperationType.SNAPSHOT.equals(operationType))
+                setTotalOrderCreated(decrease(getTotalOrderCreated()));
             setTotalOrderShipped(increase(getTotalOrderShipped()));
         }
 
         if (OrderStatus.DELIVERED.getName().equals(order.getStatus())) {
-            setTotalOrderShipped(decrease(getTotalOrderShipped()));
+            if (!OperationType.SNAPSHOT.equals(operationType))
+                setTotalOrderShipped(decrease(getTotalOrderShipped()));
             setTotalOrderDelivered(increase(getTotalOrderDelivered()));
         }
 

@@ -1,7 +1,8 @@
 package com.trendyol.order.reporting.app.service;
 
+import com.trendyol.order.reporting.app.dto.DebeziumResponseModel;
 import com.trendyol.order.reporting.app.dto.Order;
-import com.trendyol.order.reporting.app.enm.ReportType;
+import com.trendyol.order.reporting.app.enm.OperationType;
 import com.trendyol.order.reporting.app.service.report.ReportGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,14 @@ public class ReportService {
 
     private final List<ReportGenerator> reportGenerators;
 
-    public void prepareReport(Order order, ReportType reportType) {
-        final var filteredReportTypes = reportGenerators
-                .stream().filter(reportGenerator -> reportType.equals(reportGenerator.getReportType())).collect(Collectors.toList());
+    public void prepareReport(DebeziumResponseModel<Order> orderModel) {
 
-        filteredReportTypes.forEach(reportGenerator -> reportGenerator.generateReport(order));
+        final var operationType = OperationType.getByValue(orderModel.getOp());
+        final var filteredReportTypes = reportGenerators
+                .stream().filter(reportGenerator ->
+                        reportGenerator.getAllowedOperationType().contains(operationType)).collect(Collectors.toList());
+
+        filteredReportTypes.forEach(reportGenerator -> reportGenerator.generateReport(orderModel));
     }
 
 }

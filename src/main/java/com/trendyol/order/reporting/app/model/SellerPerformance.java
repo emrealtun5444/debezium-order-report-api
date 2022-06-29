@@ -37,7 +37,6 @@ public class SellerPerformance extends AbstractEntity {
 
         if (OrderStatus.CREATED.getName().equals(order.getStatus())) {
             setTotalOrderCreated(increase(getTotalOrderCreated()));
-            setTotalOrder(increase(getTotalOrder()));
         }
 
         if (OrderStatus.SHIPPED.getName().equals(order.getStatus())) {
@@ -52,6 +51,7 @@ public class SellerPerformance extends AbstractEntity {
             setTotalOrderDelivered(increase(getTotalOrderDelivered()));
         }
 
+        setTotalOrder(getTotalOrderCreated() + getTotalOrderDelivered() + getTotalOrderShipped());
     }
 
     private Long increase(Long number) {
